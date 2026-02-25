@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản Lý Kho Hàng Đơn Giản</title>
+</head>
+<body>
+    <script>
+        let sanPham = ["iPhone 15", "Samsung S23", "Oppo Reno", "Xiaomi 13", "Nokia C20"];
+        let giaTien = [1200, 900, 450, 600, 80];
+        let soLuong = [10, 5, 0, 8, 15];
+
+        let dangChay = true;
+
+        while (dangChay) {
+            let menu = prompt(`--- QUẢN LÝ KHO ---
+1. Lọc sản phẩm > 500
+2. Kiểm tra hàng hóa
+3. Tính tổng giá trị kho
+4. Giảm giá toàn bộ 10%
+5. Tìm kiếm theo tên
+6. Báo cáo tồn kho
+7. Thoát`);
+
+            if (menu === null || menu === "7") {
+                dangChay = false;
+                alert("Đã thoát chương trình!");
+                break;
+            }
+
+            if (menu === "1") {
+                let ketQua = "";
+                for (let i = 0; i < giaTien.length; i++) {
+                    if (giaTien[i] > 500) {
+                        ketQua += sanPham[i] + ", ";
+                    }
+                }
+                alert("Sản phẩm giá > 500: " + (ketQua || "Không có"));
+            } 
+            
+            else if (menu === "2") {
+                let coHangHet = "Không";
+                let tatCaTren100 = "Đúng";
+                
+                for (let i = 0; i < soLuong.length; i++) {
+                    if (soLuong[i] === 0) coHangHet = "Có";
+                    if (giaTien[i] <= 100) tatCaTren100 = "Sai";
+                }
+                alert("Hết hàng: " + coHangHet + "\nTất cả trên 100: " + tatCaTren100);
+            }
+
+            else if (menu === "3") {
+                let tongTien = 0;
+                for (let i = 0; i < giaTien.length; i++) {
+                    tongTien = tongTien + (giaTien[i] * soLuong[i]);
+                }
+                alert("Tổng giá trị kho: " + tongTien.toLocaleString() + " USD");
+            }
+
+            else if (menu === "4") {
+                for (let i = 0; i < giaTien.length; i++) {
+                    giaTien[i] = giaTien[i] * 0.9;
+                }
+                alert("Đã giảm giá 10% thành công!");
+            }
+
+            else if (menu === "5") {
+                let tuKhoa = prompt("Nhập tên máy cần tìm:").toLowerCase();
+                let timThay = "";
+                for (let i = 0; i < sanPham.length; i++) {
+                    if (sanPham[i].toLowerCase().includes(tuKhoa)) {
+                        timThay += sanPham[i] + " - " + giaTien[i] + " USD\n";
+                    }
+                }
+                alert(timThay || "Không tìm thấy sản phẩm nào");
+            }
+
+            else if (menu === "6") {
+                let baoCao = "";
+                for (let i = 0; i < sanPham.length; i++) {
+                    let tinhTrang = soLuong[i] > 0 ? "Còn hàng" : "Hết hàng";
+                    baoCao += sanPham[i] + ": " + tinhTrang + " (" + soLuong[i] + ")\n";
+                }
+                alert("BÁO CÁO KHO:\n" + baoCao);
+            }
+
+            else {
+                alert("Vui lòng chọn từ 1 đến 7!");
+            }
+        }
+    </script>
+</body>
+</html>

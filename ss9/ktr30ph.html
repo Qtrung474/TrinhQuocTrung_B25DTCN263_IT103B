@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        let orders = ["Đơn hàng A", "Đơn hàng B", "Đơn hàng C", "Đơn hàng D", "Đơn hàng E"];
+        let revenues = [1500, 2800, 1200, -500, 3200];
+
+        let hasNegative = revenues.some(revenue => revenue < 0);
+        console.log("Có đơn hàng âm: " + hasNegative);
+
+        let allAbove500 = revenues.every(revenue => revenue > 500);
+        console.log("Tất cả trên 500: " + allAbove500);
+
+        let netProfits = revenues.map(revenue => revenue * 0.9);
+        console.log(netProfits);
+
+
+
+
+    </script>
+</body>
+
+</html>
