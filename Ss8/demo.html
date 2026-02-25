@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let students = ["An", "Hieu", "Dung", "Long", "Linh"];
+        let scores = [8 , 9, 7 , 8, 9]
+        // for each
+        students.forEach(function(elament, index, arr) {
+            console.log("Giá trị phần tử :", elament);
+            console.log("Chỉ số phần tử : ", index);
+            console.log("Mảng ban đầu : ", arr);
+        })
+        // map
+        let mewScore = scores.map((elament, index) => {})
+        console.log(newScore);
+
+        // filter 
+        let temp = students.filter((elament, index) => elemnet.includes("i"))
+        let goodScore = scores.filter(elemnet => elemnet >= 9);
+        console.log(temp);
+
+        // some & every
+        let check = scores.every((elament) => elemnet >= 0);
+        let check2 = scores.some((elemnet) => elemnet < 0);
+        console.log(check);
+
+        // find & findIndex
+        let findstudent = students.find((elament) => elemnet === "An");
+        let findIndex = students.findIndex((elemnet) => elemnet === "rdAn");
+        console.log(findstudent);
+        console.log(findstudent);
+
+        // reduce
+        let totalScore = scores.reduce((accumulative, elemnet, index) => {
+            accumulative += elemnet;
+            console.log("Giá trị tích lũy sau phần tử thứ ", index);
+            console.log(accumulative);
+            return accumulative;
+        }, 0)
+        console.log(totalScore);
+    </script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        const squad = [
+            ["Nguyen Van A", 10, "FW"],
+            ["Tran Van B", 5, "MF"],
+            ["Le Van C", 2, "DF"],
+            ["Pham Van D", 12, "FW"],
+            ["Hoang Van E", 0, "GK"],
+            ["Dang Van F", 7, "MF"]
+        ];
+
+        // Chức năng 1: Xem danh sách cầu thủ
+        const showSquad = () => {
+            console.log("--- DANH SÁCH ĐỘI BÓNG ---");
+            squad.forEach(player => {
+                console.log(`${player[0]} (${player[2]}): ${player[1]} bàn thắng`);
+            });
+        };
+
+        // Chức năng 2: Tìm kiếm cầu thủ
+        const findPlayer = (name) => {
+            const result = squad.find(player => player[0].toLowerCase() === name.toLowerCase());
+            if (result) {
+                console.log(`=> ĐÃ TÌM THẤY: ${result[0]} - Vị trí: ${result[2]} - Ghi được: ${result[1]} bàn`);
+            } else {
+                console.log(`=> LỖI: Không tìm thấy cầu thủ có tên "${name}"`);
+            }
+        };
+
+        // Chức năng 3: Lọc cầu thủ theo vị trí
+        const filterByPosition = (pos) => {
+            const filtered = squad.filter(player => player[2].toUpperCase() === pos.toUpperCase());
+            console.log(`=> KẾT QUẢ LỌC (${pos}):`);
+            if (filtered.length > 0) {
+                filtered.forEach(p => console.log(`- ${p[0]} (${p[1]} bàn)`));
+            } else {
+                console.log("- Không có cầu thủ nào ở vị trí này.");
+            }
+        };
+
+        // Chức năng 4: Thống kê tổng bàn thắng
+        const totalGoals = () => {
+            const total = squad.reduce((sum, player) => sum + player[1], 0);
+            console.log(`=> Tổng số bàn thắng hiện tại là: ${total} bàn`);
+        };
+
+        // Chức năng 5: Kiểm tra hiệu suất
+        const checkPerformance = () => {
+            const hasZeroGoal = squad.some(player => player[1] === 0);
+            const allScored = squad.every(player => player[1] > 0);
+
+            if (hasZeroGoal) console.log("=> Có cầu thủ chưa ghi bàn (0 bàn).");
+            if (allScored) {
+                console.log("=> Tất cả cầu thủ đều đã ghi bàn.");
+            } else {
+                console.log("=> Không phải tất cả cầu thủ đều đã ghi bàn.");
+            }
+        };
+
+        // Hàm điều hướng Menu (Giả lập môi trường prompt)
+        const mainMenu = () => {
+            let choice;
+            do {
+                console.log("\n--- QUẢN LÝ ĐỘI BÓNG ---");
+                console.log("1. Xem danh sách");
+                console.log("2. Tìm kiếm (Find)");
+                console.log("3. Lọc vị trí (Filter)");
+                console.log("4. Tổng bàn thắng (Reduce)");
+                console.log("5. Kiểm tra hiệu suất (Some/Every)");
+                console.log("0. Thoát");
+
+                choice = prompt("Bạn chọn (0-5):");
+
+                switch (choice) {
+                    case "1":
+                        showSquad();
+                        break;
+                    case "2":
+                        const nameSearch = prompt("Nhập tên cầu thủ cần tìm:");
+                        findPlayer(nameSearch);
+                        break;
+                    case "3":
+                        const posSearch = prompt("Nhập vị trí muốn lọc (FW/MF/DF/GK):");
+                        filterByPosition(posSearch);
+                        break;
+                    case "4":
+                        totalGoals();
+                        break;
+                    case "5":
+                        checkPerformance();
+                        break;
+                    case "0":
+                        console.log("=> Hẹn gặp lại!");
+                        break;
+                    default:
+                        console.log("Lựa chọn không hợp lệ!");
+                }
+            } while (choice !== "0");
+        };
+
+        // Kích hoạt chương trình
+        // Lưu ý: Chạy trên Console trình duyệt để sử dụng hàm prompt()
+        mainMenu();
+    </script>
+</body>
+
+</html>
