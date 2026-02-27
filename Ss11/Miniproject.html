@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dự án nhỏ Session 11</title>
+</head>
+<body>
+    <h1 style="text-align: center;">Hệ Thống Quản Lý Sinh Viên</h1>
+    <script>
+        let students = [
+            { id: 1, name: "Nguyen Van An", age: 20, gpa: 8.5, status: "active" },
+            { id: 2, name: "Tran Thi Bich", age: 17, gpa: 7.2, status: "active" },
+            { id: 3, name: "Le Hoang Cuong", age: 22, gpa: 9.1, status: "inactive" },
+            { id: 4, name: "Pham Thi Dung", age: 19, gpa: 6.8, status: "active" },
+        ];
+
+        let nextId = 5;
+
+        function showMenu() {
+            return prompt(
+                `===== HỆ THỐNG QUẢN LÝ SINH VIÊN =====
+1. Thêm sinh viên mới
+2. Xem danh sách sinh viên
+3. Lọc danh sách học bổng (GPA > 8.0)
+4. Cập nhật thông tin sinh viên
+5. Xóa hồ sơ sinh viên
+6. Xác minh tính tuân thủ
+7. Thống kê học thuật
+8. Chuẩn hóa dữ liệu
+0. Thoát
+======================================
+Nhập lựa chọn của bạn:`
+            );
+        }
+
+        function formatStudent(s) {
+            return `Mã số: ${s.id} | Tên: ${s.name} | Tuổi: ${s.age} | GPA: ${s.gpa} | Trạng thái: ${s.status}`;
+        }
+
+        function formatList(list, title = "Danh Sách Sinh Viên") {
+            if (list.length === 0) return `${title}\n(Không tìm thấy bản ghi nào)`;
+            const divider = "-".repeat(60);
+            const rows = list.map((s) => formatStudent(s)).join("\n");
+            return `${title}\n${divider}\n${rows}\n${divider}\nTổng cộng: ${list.length} sinh viên`;
+        }
+
+        function createStudent() {
+            const name = prompt("Nhập tên sinh viên:");
+            if (!name || name.trim() === "") return alert("Tên không được để trống!");
+
+            const age = parseInt(prompt("Nhập tuổi:"));
+            if (isNaN(age) || age <= 0) return alert("Tuổi không hợp lệ!");
+
+            const gpa = parseFloat(prompt("Nhập điểm trung bình (0.0 - 10.0):"));
+            if (isNaN(gpa) || gpa < 0 || gpa > 10) return alert("GPA không hợp lệ!");
+
+            const statusInput = prompt("Nhập trạng thái (active / inactive):").trim().toLowerCase();
+            if (statusInput !== "active" && statusInput !== "inactive")
+                return alert('Trạng thái phải là "active" hoặc "inactive"!');
+
+            const newStudent = {
+                id: nextId++,
+                name: name.trim(),
+                age,
+                gpa,
+                status: statusInput,
+            };
+
+            students.push(newStudent);
+            alert(`Thêm sinh viên thành công!\n${formatStudent(newStudent)}`);
+        }
+
+        function readAllStudents() {
+            alert(formatList(students, "===== TẤT CẢ SINH VIÊN ====="));
+        }
+
+        function filterScholarship() {
+            const candidates = students.filter((s) => s.gpa > 8.0);
+            alert(formatList(candidates, "===== SINH VIÊN ĐỦ ĐIỀU KIỆN HỌC BỔNG (GPA > 8.0) ====="));
+        }
+
+        function updateStudent() {
+            const id = parseInt(prompt("Nhập mã số sinh viên cần cập nhật:"));
+            const student = students.find((s) => s.id === id);
+
+            if (!student) return alert(`Không tìm thấy sinh viên có mã số: ${id}`);
+
+            alert(`Kết quả tìm thấy:\n${formatStudent(student)}\n\nĐể trống nếu muốn giữ nguyên giá trị cũ.`);
+
+            const newName = prompt(`Tên mới (hiện tại: ${student.name}):`);
+            const newGpa = prompt(`GPA mới (hiện tại: ${student.gpa}):`);
+
+            if (newName && newName.trim() !== "") student.name = newName.trim();
+
+            if (newGpa && newGpa.trim() !== "") {
+                const parsedGpa = parseFloat(newGpa);
+                if (!isNaN(parsedGpa) && parsedGpa >= 0 && parsedGpa <= 10) {
+                    student.gpa = parsedGpa;
+                } else {
+                    alert("Giá trị GPA không hợp lệ. Không cập nhật điểm.");
+                }
+            }
+
+            alert(`Cập nhật thành công!\n${formatStudent(student)}`);
+        }
+
+        function deleteStudent() {
+            const id = parseInt(prompt("Nhập mã số sinh viên muốn xóa:"));
+            const index = students.findIndex((s) => s.id === id);
+
+            if (index === -1) return alert(`Không tìm thấy sinh viên có mã số: ${id}`);
+
+            const removed = students[index];
+            const confirm = prompt(`Bạn có chắc chắn muốn xóa không?\n${formatStudent(removed)}\n\nNhập "yes" để xác nhận:`);
+
+            if (confirm && confirm.trim().toLowerCase() === "yes") {
+                students = students.filter((s) => s.id !== id);
+                alert(`Sinh viên "${removed.name}" đã được xóa khỏi hệ thống.`);
+            } else {
+                alert("Đã hủy thao tác xóa.");
+            }
+        }
+
+        function complianceVerification() {
+            const hasMinor = students.some((s) => s.age < 18);
+            const allActive = students.every((s) => s.status === "active");
+
+            let result = "===== XÁC MINH TÍNH TUÂN THỦ =====\n";
+            result += `\nCó sinh viên nào dưới 18 tuổi không: ${hasMinor ? "CÓ" : "KHÔNG"}`;
+
+            if (hasMinor) {
+                const minors = students.filter((s) => s.age < 18);
+                result += "\n   Danh sách sinh viên vị thành niên:";
+                minors.forEach((s) => {
+                    result += `\n   → ${s.name} (Tuổi: ${s.age})`;
+                });
+            }
+
+            result += `\n\nTất cả sinh viên có trạng thái "active" không: ${allActive ? "CÓ" : "KHÔNG"}`;
+
+            if (!allActive) {
+                const inactive = students.filter((s) => s.status !== "active");
+                result += "\n   Danh sách sinh viên không hoạt động (inactive):";
+                inactive.forEach((s) => {
+                    result += `\n   → ${s.name} (Trạng thái: ${s.status})`;
+                });
+            }
+
+            alert(result);
+        }
+
+        function academicStatistics() {
+            if (students.length === 0) return alert("Không có sinh viên nào trong danh sách!");
+
+            const totalGpa = students.reduce((acc, s) => acc + s.gpa, 0);
+            const avgGpa = totalGpa / students.length;
+
+            const highest = students.reduce((max, s) => (s.gpa > max.gpa ? s : max), students[0]);
+            const lowest = students.reduce((min, s) => (s.gpa < min.gpa ? s : min), students[0]);
+
+            let result = "===== THỐNG KÊ HỌC THUẬT =====\n";
+            result += `\nTổng số sinh viên   : ${students.length}`;
+            result += `\nTổng điểm tích lũy  : ${totalGpa.toFixed(2)}`;
+            result += `\nĐiểm trung bình lớp : ${avgGpa.toFixed(2)}`;
+            result += `\n\nĐiểm cao nhất: ${highest.name} (${highest.gpa})`;
+            result += `\nĐiểm thấp nhất : ${lowest.name} (${lowest.gpa})`;
+
+            alert(result);
+        }
+
+        function dataNormalization() {
+            const normalized = students.map((s) => ({
+                ...s,
+                name: s.name.toUpperCase(),
+            }));
+
+            alert(formatList(normalized, "===== DỮ LIỆU ĐÃ CHUẨN HÓA (TÊN VIẾT HOA) ====="));
+            console.log("Danh sách đã chuẩn hóa:", normalized);
+        }
+
+        function main() {
+            let running = true;
+
+            while (running) {
+                const choice = showMenu();
+
+                switch (choice) {
+                    case "1": createStudent(); break;
+                    case "2": readAllStudents(); break;
+                    case "3": filterScholarship(); break;
+                    case "4": updateStudent(); break;
+                    case "5": deleteStudent(); break;
+                    case "6": complianceVerification(); break;
+                    case "7": academicStatistics(); break;
+                    case "8": dataNormalization(); break;
+                    case "0":
+                        alert("Tạm biệt! Hẹn gặp lại.");
+                        running = false;
+                        break;
+                    case null:
+                        running = false;
+                        break;
+                    default:
+                        alert("Lựa chọn không hợp lệ! Vui lòng nhập từ 0 đến 8.");
+                }
+            }
+        }
+
+        main();
+    </script>
+</body>
+</html>
