@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        const players = [
+            { name: "Messi", position: "Forward", age: 36, goals: 25, assists: 15, matches: 34, yellowCards: 2, years: 18, salary: 100 },
+            { name: "Ronaldo", position: "Forward", age: 39, goals: 30, assists: 10, matches: 38, yellowCards: 4, years: 20, salary: 95 },
+            { name: "Neymar", position: "Forward", age: 32, goals: 18, assists: 20, matches: 32, yellowCards: 3, years: 12, salary: 90 },
+            { name: "De Bruyne", position: "Midfielder", age: 33, goals: 8, assists: 25, matches: 35, yellowCards: 1, years: 13, salary: 88 },
+            { name: "Kante", position: "Midfielder", age: 33, goals: 2, assists: 5, matches: 36, yellowCards: 0, years: 11, salary: 82 },
+            { name: "Van Dijk", position: "Defender", age: 33, goals: 5, assists: 3, matches: 33, yellowCards: 2, years: 14, salary: 85 },
+            { name: "Alisson", position: "Goalkeeper", age: 31, goals: 0, assists: 1, matches: 37, yellowCards: 0, years: 10, salary: 78 },
+            { name: "Mbappe", years: 7, salary: 85 },
+            { name: "Haaland", years: 5, salary: 80 },
+            { name: "Modric", years: 22, salary: 70 },
+            { name: "Benzema", years: 19, salary: 75 }
+        ];
+
+        const teamHistory = [
+            {
+                name: "Messi",
+                position: "Forward",
+                nationality: "Argentina",
+                seasons: {
+                    "2022-2023": { matches: 34, goals: 21, assists: 14, yellowCards: 3 },
+                    "2023-2024": { matches: 32, goals: 25, assists: 15, yellowCards: 2 },
+                    "2024-2025": { matches: 28, goals: 18, assists: 12, yellowCards: 1 }
+                }
+            }
+        ];
+
+        function addPerformanceScore(p) {
+            p.performancePerMatch = Number(((p.goals + p.assists) / p.matches).toFixed(2));
+            p.isKeyPlayer = p.performancePerMatch >= 1.0;
+            console.log(p);
+        }
+
+        function getFilteredTotalGoals(minGoals, teamPlayers) {
+            return teamPlayers
+                .filter(p => p.goals >= minGoals)
+                .reduce((sum, p) => sum + p.goals, 0);
+        }
+
+        function analyzeSalary(minYears, teamPlayers) {
+            const filtered = teamPlayers.filter(p => p.years >= minYears);
+            if (filtered.length === 0) return { totalSalary: 0, highestPaid: null, lowestPaid: null };
+
+            const totalSalary = filtered.reduce((sum, p) => sum + p.salary, 0);
+            const highestPaid = filtered.reduce((prev, curr) => (curr.salary > prev.salary ? curr : prev));
+            const lowestPaid = filtered.reduce((prev, curr) => (curr.salary < prev.salary ? prev : curr));
+
+            return { totalSalary, highestPaid, lowestPaid };
+        }
+
+        function generatePlayerSeasonReport(playerName, history) {
+            const player = history.find(p => p.name === playerName);
+            if (!player) return `Không tìm thấy cầu thủ [${playerName}]`;
+
+            const seasonsArr = Object.entries(player.seasons).map(([name, stats]) => ({ name, ...stats }));
+            const careerStats = seasonsArr.reduce((acc, s) => {
+                acc.totalMatches += s.matches;
+                acc.totalGoals += s.goals;
+                acc.totalAssists += s.assists;
+                acc.totalYellowCards += s.yellowCards;
+                return acc;
+            }, { totalMatches: 0, totalGoals: 0, totalAssists: 0, totalYellowCards: 0 });
+
+            const best = seasonsArr.reduce((prev, curr) =>
+                (curr.goals > prev.goals || (curr.goals === prev.goals && curr.assists > prev.assists)) ? curr : prev
+            );
+
+            const report = {
+                name: player.name,
+                position: player.position,
+                nationality: player.nationality,
+                careerStats: {
+                    ...careerStats,
+                    averageGoalsPerMatch: Number((careerStats.totalGoals / careerStats.totalMatches).toFixed(2)),
+                    averageAssistsPerMatch: Number((careerStats.totalAssists / careerStats.totalMatches).toFixed(2)),
+                    bestSeason: { season: best.name, goals: best.goals, assists: best.assists }
+                }
+            };
+            console.log(report);
+        }
+
+        function generateRankingReport(minMatches, teamPlayers) {
+            const filtered = teamPlayers
+                .filter(p => p.matches >= minMatches)
+                .map(p => {
+                    const performanceScore = Number(((p.goals + p.assists) / p.matches).toFixed(2));
+                    const efficiencyScore = Number((performanceScore - (p.yellowCards / p.matches) * 10).toFixed(2));
+                    return { ...p, performanceScore, efficiencyScore };
+                });
+
+            filtered.sort((a, b) => b.efficiencyScore - a.efficiencyScore || b.performanceScore - a.performanceScore || b.goals - a.goals);
+
+            console.log(`XẾP HẠNG ĐỘI BÓNG (từ ${minMatches} trận trở lên)`);
+            filtered.forEach((p, i) => {
+                console.log(`${i + 1}. ${p.name} - Efficiency: ${p.efficiencyScore} | Performance: ${p.performanceScore} | Goals: ${p.goals}`);
+            });
+
+            console.log(`Tổng số cầu thủ xếp hạng: ${filtered.length}`);
+            if (filtered.length > 0) {
+                console.log(`Cầu thủ xuất sắc nhất: ${filtered[0].name}`);
+                const top3 = filtered.slice(0, 3);
+                const avgEff = (top3.reduce((sum, p) => sum + p.efficiencyScore, 0) / top3.length).toFixed(2);
+                console.log(`Trung bình efficiency top 3: ${avgEff}`);
+            }
+        }
+
+ 
+        addPerformanceScore(players[0]);
+        console.log("Tổng bàn thắng (>=5):", getFilteredTotalGoals(5, players));
+        console.log("Phân tích lương (>=10 năm):", analyzeSalary(10, players));
+        generatePlayerSeasonReport("Messi", teamHistory);
+        generateRankingReport(30, players);
+    </script>
+</body>
+
+</html>

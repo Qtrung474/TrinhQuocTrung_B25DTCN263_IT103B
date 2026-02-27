@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        const player = {
+            name: "Messi",
+            position: "Forward",
+            age: 36,
+            goals: 25,
+            assists: 15,
+        };
+
+        function showPlayerInfo(p) {
+
+            const totalContribution = p.goals + p.assists;
+
+            console.log(`Tên: ${p.name}`);
+            console.log(`Vị trí: ${p.position}`);
+            console.log(`Tuổi: ${p.age}`);
+            console.log(`Bàn thắng mùa này: ${p.goals}`);
+            console.log(`Kiến tạo mùa này: ${p.assists}`);
+            console.log(`Tổng đóng góp: ${totalContribution}`);
+        }
+
+
+        showPlayerInfo(player);
+    </script>
+</body>
+
+</html>

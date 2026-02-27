@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let myObj = {
+            key : "value"
+           
+            
+        }
+        let student = {
+            id : 1,
+            Fisrname : "Trịnh",
+            Lastname : "Trung",
+
+        }
+        // in ra 1 đối tượng
+        console.log(student);
+        // đọc từng thuộc tính bản trong 1 đối tượng
+        // ví dụ in ra fisrname
+        // read
+        console.log(student.Fisrname);
+        // tạo mới 1 thuộc tính mới :
+        student.age = 28;
+        console.log(student);
+        // truy cậ[ 1 thuộc tính đặt theo biến khác bên ngoài
+        let input = "age"
+        console.log(student.age);
+        console.log(student[input]);
+        
+        // update
+        
+        console.log(student);
+        
+
+
+        // Delete
+        delete student.age;
+        console.log(student);
+        
+        
+        
+        
+        
+        
+    </script>
+</body>
+</html>
