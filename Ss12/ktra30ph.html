@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        let students = [
+            { id: 1, name: "Nguyen Văn A", score: 8.5, gender: "Nam" },
+            { id: 2, name: "Trân Thị B", score: 4.2, gender: "Nữ" },
+            { id: 3, name: "Lê Văn C", score: 9.0, gender: "Nam" },
+            { id: 4, name: "Phạm Thị D", score: 5.5, gender: "Nữ" },
+            { id: 5, name: "Hoang Văn E", score: 3.8, gender: "Nam" }
+        ];
+
+        function getTopFemaleStudents(list) {
+            return list
+                .filter(student => student.gender === "Nữ")
+                .sort((a, b) => b.score - a.score);
+        }
+
+        function getPassedStudentNames(list) {
+            return list
+                .filter(student => student.score >= 5.0)
+                .map(student => student.name);
+        }
+        console.log("1. Danh sách sinh viên nữ (giảm dần theo điểm):", getTopFemaleStudents(students));
+        console.log("2. Tên các sinh viên vượt qua bài kiểm tra:", getPassedStudentNames(students));
+
+    </script>
+</body>
+
+</html>

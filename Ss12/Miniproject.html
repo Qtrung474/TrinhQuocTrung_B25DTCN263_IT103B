@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý sinh viên - Rút gọn</title>
+</head>
+<body>
+    <script>
+        // 1. Khởi tạo dữ liệu mẫu
+        let students = [
+            { id: "S01", name: "Nguyen Van A", age: 19, gpa: 8.9, status: "active" },
+            { id: "S02", name: "Tran Thi B", age: 18, gpa: 7.5, status: "active" },
+            { id: "S04", name: "Pham Thi D", age: 20, gpa: 2.5, status: "inactive", deletedAt: Date.now() }
+        ].map(s => ({ ...s, createdAt: Date.now(), updatedAt: null }));
+
+        // 2. Các hàm chức năng rút gọn
+        const createStudent = () => {
+            const id = prompt("Nhập ID (duy nhất):");
+            if (!id || students.some(s => s.id === id)) return alert("ID không hợp lệ hoặc đã tồn tại!");
+
+            const name = prompt("Nhập tên:");
+            const age = parseInt(prompt("Nhập tuổi (16-60):"));
+            const gpa = parseFloat(prompt("Nhập GPA (0-10):"));
+            const status = prompt("Trạng thái (active/inactive):").toLowerCase();
+
+            if (name && age >= 16 && age <= 60 && gpa >= 0 && gpa <= 10) {
+                students.push({ id, name, age, gpa, status, createdAt: Date.now() });
+                alert("Thêm thành công!");
+            } else alert("Dữ liệu nhập vào không hợp lệ!");
+        };
+
+        const updateStudent = () => {
+            const id = prompt("Nhập ID cần sửa:");
+            const st = students.find(s => s.id === id);
+            if (!st) return alert("Không tìm thấy!");
+
+            st.name = prompt(`Tên mới (cũ: ${st.name}):`) || st.name;
+            st.age = parseInt(prompt(`Tuổi mới (cũ: ${st.age}):`)) || st.age;
+            st.gpa = parseFloat(prompt(`GPA mới (cũ: ${st.gpa}):`)) || st.gpa;
+            st.status = prompt(`Trạng thái mới (active/inactive):`) || st.status;
+            st.updatedAt = Date.now();
+            alert("Cập nhật thành công!");
+        };
+
+        const softDelete = () => {
+            const id = prompt("Nhập ID muốn xóa tạm thời:");
+            const st = students.find(s => s.id === id);
+            if (st && confirm(`Xóa ${st.name}?`)) {
+                st.status = "inactive";
+                st.deletedAt = Date.now();
+                alert("Đã chuyển trạng thái sang Inactive.");
+            }
+        };
+
+        const viewPipeline = () => {
+            const keyword = (prompt("Tìm kiếm theo tên (bỏ trống để hiện hết):") || "").toLowerCase();
+            const sortDir = prompt("Sắp xếp GPA (asc/desc):") === "asc" ? 1 : -1;
+
+            // Xử lý Search và Sort trong một chuỗi lệnh
+            const result = students
+                .filter(s => s.name.toLowerCase().includes(keyword))
+                .sort((a, b) => (a.gpa - b.gpa) * sortDir);
+
+            console.clear();
+            console.log("--- KẾT QUẢ TRUY VẤN ---");
+            console.table(result);
+        };
+
+        const showAnalytics = () => {
+            if (!students.length) return alert("Chưa có dữ liệu!");
+            
+            const stats = {
+                total: students.length,
+                avgGpa: (students.reduce((sum, s) => sum + s.gpa, 0) / students.length).toFixed(2),
+                active: students.filter(s => s.status === "active").length,
+                distribution: students.reduce((acc, s) => {
+                    const rank = s.gpa >= 8.5 ? "Xuất sắc" : s.gpa >= 7 ? "Khá/Giỏi" : "Trung bình/Yếu";
+                    acc[rank] = (acc[rank] || 0) + 1;
+                    return acc;
+                }, {})
+            };
+
+            console.clear();
+            console.log("--- BÁO CÁO THỐNG KÊ ---");
+            console.log(stats);
+            alert("Đã in thống kê chi tiết ra Console (F12).");
+        };
+
+        // 3. Vòng lặp Menu chính
+        const main = () => {
+            let choice;
+            while (true) {
+                choice = prompt(`HỆ THỐNG QUẢN LÝ (Mini):
+1. Thêm mới sinh viên
+2. Cập nhật thông tin
+3. Xóa tạm thời (Soft Delete)
+4. Xem danh sách (Lọc & Sắp xếp)
+5. Thống kê Dashboard
+0. Thoát`);
+
+                if (choice === "0" || choice === null) break;
+                switch (choice) {
+                    case "1": createStudent(); break;
+                    case "2": updateStudent(); break;
+                    case "3": softDelete(); break;
+                    case "4": viewPipeline(); break;
+                    case "5": showAnalytics(); break;
+                    default: alert("Lựa chọn không có trong menu!");
+                }
+            }
+        };
+
+        main();
+    </script>
+</body>
+</html>
