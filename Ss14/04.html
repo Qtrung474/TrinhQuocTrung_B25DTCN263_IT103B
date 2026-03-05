@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Danh sách sản phẩm chợ tết</h1>
+    <ul id="product-list"></ul>
+    <form id="product-form">
+        <input type="text" id="product-name" placeholder="Tên san phẩm">
+        <input type="number" id="product-price" placeholder="Giá (VND)">
+        <button type="submit">Thêm sản phẩm</button>
+    </form>
+    <script>
+        const products = [
+            { id: 1, name: "Bánh Chưng", price: 150000 },
+            { id: 2, name: "Giò Lụa", price: 180000 },
+            { id: 3, name: "Cành Đào", price: 500000 },
+            { id: 4, name: "Mứt Tết", price: 120000 },
+            { id: 5, name: "Bao Lì Xì", price: 25000 },
+            { id: 6, name: "Dưa Hấu Tết", price: 80000 },
+        ];
+
+        const productList = document.getElementById('product-list');
+        const productForm = document.getElementById('product-form');
+        const productNameInput = document.getElementById('product-name');
+        const productPriceInput = document.getElementById('product-price');
+
+        function renderProduct(product) {
+            const li = document.createElement('li');
+            li.classList.add('product-item');
+            li.innerHTML = `
+        <h3>${product.name}</h3>
+        <p class="price-display">Giá: ${Number(product.price).toLocaleString()} VND</p>
+        <button class="edit-price-btn">Sửa giá</button>
+        <button class="delete-btn">Xóa</button>
+    `;
+
+            li.querySelector('.edit-price-btn').addEventListener('click', () => {
+                const newPrice = prompt("Nhập giá mới (VND):");
+                if (newPrice !== null && newPrice.trim() !== "" && !isNaN(newPrice)) {
+                    const priceDisplay = li.querySelector('.price-display');
+                    priceDisplay.innerText = `Giá: ${Number(newPrice).toLocaleString()} VND`;
+                } else if (newPrice !== null) {
+                    alert("Vui lòng nhập một con số hợp lệ!");
+                }
+            });
+
+            li.querySelector('.delete-btn').addEventListener('click', () => {
+                if (confirm("Bạn có chắc muốn xóa sản phẩm này?")) {
+                    li.remove();
+                }
+            });
+
+            productList.appendChild(li);
+        }
+
+        products.forEach(product => renderProduct(product));
+
+        productForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = productNameInput.value;
+            const price = productPriceInput.value;
+
+            if (name && price) {
+                const newProduct = {
+                    id: Date.now(),
+                    name: name,
+                    price: price
+                };
+                renderProduct(newProduct);
+                productNameInput.value = '';
+                productPriceInput.value = '';
+            }
+        });
+    </script>
+</body>
+
+</html>

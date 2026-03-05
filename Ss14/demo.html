@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+    
+        }
+
+        form {
+            margin: 20px;
+            width: 240px;
+            text-align: center;
+        }
+
+        label{
+            margin-right: 5px ;
+        }
+
+        .submit-btn{
+            margin-top: 10px ;
+            padding: 3px 10px;
+        }
+
+
+    </style>
+</head>
+<body>
+    <form action="">
+        <label for = "fullName" class="name-label">Họ và tên</label>
+        <input type="text" id = "fullName">
+        <h3 onclick="handleClick">input from</h3>
+        <br>
+        <input type="submit" value="submit" class="submit-btn">
+    </form>
+    <script>
+        // Truy cập phần tử thông qua DOM
+        let inputElement = document.getElementById("fullName");
+        let labelElement = document.getElementsByClassName("name-label");
+        document.getElementsByTagName("a")
+
+        document.querySelector()
+        document.querySelectorAll()
+
+        console.log(inputElemnet.id);
+        console.log(labelElement[1]);
+
+        //  lấy nội dung  trong phần tử
+        let inputFrom = document.getElementById("inputFrom");
+
+        //  Nội dung html bên trong phần tử
+        console.log(inputFrom.innerHTML);
+        inputFrom.innerHTML = "<h3>Đây là nội dung html thêm từ js,nội dung này được ghi sẽ ghi đè toàn bộ innerHTMl cũ</h3>"
+
+        //Nội dung text bên trong phần tử
+        console.log(inputFrom.textContent);//Lấy toàn bộ text trong file html
+        console.log(inputFrom.innerHTML);//Chỉ lấy text được hiện thị trên giao diện
+        
+        // Lấy thuộc tính bên trong phần tử
+        inputFrom.classList.add("bg-blue");
+        // Xóa class khỏi phần tử
+        inputFrom.classList.remove("bg-blue");
+        // Nếu chưa có class thì thêm,nếu có rồi xóa
+        inputFrom.classList.toggle("");
+
+        // Tạo phần tử html
+        let headerElement = document.createElement("h1");
+        let body = document.getElementsByTagName("body");
+        // Thêm nội dung cho phần tử vừa tạo
+        headerElement.innerHTML = "Nội dung"
+        // headerElement.classList.add()
+        console.log(headerElement);
+        // Thêm phần tử vừa tạo và cuối thẻ body
+        body[0].appendChild(headerElement);
+
+        function handleClick(){
+            let input = document.getElementById("fullname")
+            input.classList.toggle("bg-blue");
+        }
+
+        let h3 = document.getElementsByTagName("h3")[0];
+        h3.onclick = handleClick;
+
+        h3.addEventListener("click", (e)=>{
+            console.log(e.target);
+        })
+
+        let input = document.getElementById("fullName")
+        input.addEventListener("change", () => {
+            console.log(input.value);
+            
+        })
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        
+         
+        
+    </script>
+</body>
+</html>
