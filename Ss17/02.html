@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tết</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            padding: 50px;
+        }
+
+        .card {
+            width: 400px;
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Header màu đỏ */
+        .header {
+            background-color: #d32f2f;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .header p {
+            margin: 5px 0 0;
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .list-container {
+            padding: 15px;
+            background-color: #fff;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 25px;
+            border: 2px solid #ffa000;
+            /* Viền cam mặc định */
+            background-color: #fff9c4;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        /* Khi hoàn thành: đổi sang tông xanh */
+        .todo-item.completed {
+            border-color: #4caf50;
+            background-color: #e8f5e9;
+        }
+
+        .icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #999;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            font-size: 14px;
+        }
+
+        .completed .icon {
+            background-color: #4caf50;
+            border-color: #4caf50;
+            color: white;
+        }
+
+        .completed .text {
+            text-decoration: line-through;
+            color: #666;
+        }
+
+        .footer {
+            font-size: 10px;
+            color: #999;
+            text-align: center;
+            padding: 10px;
+            background: #fafafa;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <div class="header">
+            <h2>Công việc chuẩn bị Tết</h2>
+            <p>Click để đánh dấu hoàn thành</p>
+        </div>
+
+        <div class="list-container" id="todo-list">
+        </div>
+
+        <div class="footer">
+            Trạng thái được lưu tự động vào localStorage • Refresh để kiểm tra
+        </div>
+    </div>
+
+    <script>
+        const initialTodos = [
+            { id: 1, task: "Mua banh chung", done: false },
+            { id: 2, task: "Dọn nhà đón Tết", done: false },
+            { id: 3, task: "Goi bánh chưng", done: false },
+            { id: 4, task: "Trang trí nhà cửa bang hoa mai, hoa dao", done: false },
+            { id: 5, task: "Mua phong bao li xi", done: false },
+            { id: 6, task: "Chuẩn bị mâm ngũ quả", done: false },
+
+    ];
+
+        let myTodos = JSON.parse(localStorage.getItem("myTodos")) || null;
+
+        // Khởi tạo lần đầu nếu chưa có dữ liệu
+        if (!myTodos) {
+            myTodos = initialTodos;
+            localStorage.setItem("myTodos", JSON.stringify(myTodos));
+        }
+
+        function render() {
+            const container = document.getElementById("todo-list");
+            container.innerHTML = "";
+
+            myTodos.forEach(item => {
+                const div = document.createElement("div");
+                div.className = `todo-item ${item.done ? 'completed' : ''}`;
+
+                // Nội dung bên trong mỗi dòng
+                div.innerHTML = `
+                <div class="icon">${item.done ? '✓' : ''}</div>
+                <div class="text">${item.task}</div>
+            `;
+
+                div.onclick = () => toggleStatus(item.id);
+                container.appendChild(div);
+            });
+        }
+
+        function toggleStatus(id) {
+            myTodos = myTodos.map(t => t.id === id ? { ...t, done: !t.done } : t);
+            localStorage.setItem("myTodos", JSON.stringify(myTodos));
+            render();
+        }
+
+        render();
+    </script>
+</body>
+
+</html>

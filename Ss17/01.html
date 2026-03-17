@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách việc cần làm Tết</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fdfaf0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            width: 400px;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            background-color: #d32f2f;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .header p {
+            margin: 5px 0 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .todo-list {
+            padding: 20px;
+            list-style: none;
+            margin: 0;
+        }
+
+        .todo-item {
+            background: #fffef2;
+            margin-bottom: 15px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border-left: 5px solid #ffa000;
+        }
+
+        .todo-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon-flower {
+            color: #ff80ab;
+            font-size: 18px;
+        }
+
+        .status {
+            font-style: italic;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .footer {
+            padding: 15px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+            border-top: 1px solid #eee;
+            background: #fafafa;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>Chuẩn bị Tết Nguyên Đán</h1>
+            <p>Danh sách việc cần làm</p>
+        </div>
+
+        <ul id="todoContainer" class="todo-list">
+            </ul>
+
+        <div class="footer">
+            Đã lưu vào localStorage lần đầu tiên • Refresh trang để kiểm tra
+        </div>
+    </div>
+
+    <script>
+        // 1. Mảng sản phẩm cho trước
+        const todos = [
+            { id: 1, task: "Mua bánh chưng", done: false },
+            { id: 2, task: "Dọn nhà đón Tết", done: false },
+            { id: 3, task: "Gói bánh chưng", done: false },
+            { id: 4, task: "Trang trí nhà cửa", done: false },
+        ];
+
+        const todoContainer = document.getElementById('todoContainer');
+
+        // 2. Hàm hiển thị danh sách công việc
+        function renderTodos(data) {
+            todoContainer.innerHTML = data.map(item => `
+                <li class="todo-item">
+                    <div class="todo-content">
+                        <span class="icon-flower">✿</span>
+                        <span>${item.task}</span>
+                    </div>
+                    <span class="status">${item.done ? 'Đã xong' : 'Chưa làm'}</span>
+                </li>
+            `).join('');
+        }
+
+        // 3. Logic khi trang web được tải
+        window.onload = function() {
+            // Hiển thị danh sách ra màn hình
+            renderTodos(todos);
+
+            // Kiểm tra và lưu vào localStorage (chỉ thực hiện 1 lần duy nhất)
+            if (!localStorage.getItem("myTodos")) {
+                localStorage.setItem("myTodos", JSON.stringify(todos));
+                console.log("Dữ liệu đã được lưu vào localStorage lần đầu.");
+            } else {
+                console.log("Dữ liệu đã tồn tại trong localStorage.");
+            }
+        };
+    </script>
+</body>
+</html>
